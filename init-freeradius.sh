@@ -4,6 +4,11 @@
 RADIUS_PATH=/etc/freeradius
 
 function init_freeradius {
+
+	# Disable default compression for compatibility with Cisco devices
+	sed -i 's|Framed-Protocol = PPP,|Framed-Protocol = PPP|' /etc/raddb/users
+	sed -i 's|Framed-Compression = Van-Jacobson-TCP-IP|#Framed-Compression = Van-Jacobson-TCP-IP|' /etc/raddb/users
+
 	# Enable SQL in freeradius
 	sed -i 's|driver = "rlm_sql_null"|driver = "rlm_sql_mysql"|' $RADIUS_PATH/mods-available/sql
 	sed -i 's|dialect = "sqlite"|dialect = "mysql"|' $RADIUS_PATH/mods-available/sql
